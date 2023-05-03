@@ -37,8 +37,9 @@ const getaddressPro = function(para){
       renderErr('Invalid IP address or domain')
     })
 }
-getaddressPro('12.4.5.7')
-getaddressPro('8.8.8.8')
+// getaddressPro('197.210.85.177/32')
+// getaddressPro('12.4.5.7')
+// getaddressPro('8.8.8.8')
 /* My IP address 197.210.85.177/32 */
 /*
 http://ip-api.com/json/{query}

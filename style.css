@@ -78,6 +78,7 @@ BOTTOM CONTAINER
   border-radius: 10px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  position: relative;
 }
 .details div {
   padding: 0 1.5rem 0 1rem;
@@ -93,10 +94,6 @@ BOTTOM CONTAINER
 .bottom-container .locate {
   top: 50%;
 }
-.bottom-container iframe {
-  width: 100%;
-  height: 380px;
-}
 .attribution {
   text-align: center;
   color: var(---grey-);
@@ -106,18 +103,26 @@ BOTTOM CONTAINER
   font-weight: 700;
   text-decoration: none;
 }
-.error{
+.error {
   text-align: center;
   font-weight: 500;
   color: var(---white-);
-  animation: animate .8s ease-in-out;
+  animation: animate 0.8s ease-in-out;
 }
+
+/* Map */
+
+#map {
+  height: calc(95vh - 220px);
+  z-index: -1;
+}
+
 @keyframes animate {
-  0%{
+  0% {
     opacity: 0;
     transform: translateY(-100%);
   }
-  100%{
+  100% {
     opacity: 1;
     transform: translateY(0);
   }
