@@ -51,6 +51,9 @@ body {
   font-weight: 500;
   font-size: inherit;
 }
+.search input:focus{
+  border: 3px solid #969696;
+}
 .send {
   display: flex;
   justify-content: center;
