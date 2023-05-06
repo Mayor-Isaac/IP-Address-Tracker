@@ -9,17 +9,21 @@ const $country = document.querySelector(".country");
 const $city = document.querySelector(".city");
 const code = document.querySelector(".postalCode");
 const $isp = document.querySelector(".isp");
+const mapDiv = document.querySelector("#map");
 
-const getPosition = function(){
-  if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-         loadMap ,
-        function () {
-          alert('Please allow browser to see your location');
-        } /* fail callback */
-      );
-    }
-  }
+// const getPosition = function () {
+//   if (navigator.geolocation) {
+//     navigator.geolocation.getCurrentPosition(
+//       loadMap,
+//       function () {
+//         alert("Please allow browser to see your location");
+//          /* fail callback */
+//       }
+//     );
+//   }
+// };
+
+// getPosition()
 
 const renderErr = function (errMsg) {
   const errDiv = document.createElement("div");
@@ -29,7 +33,6 @@ const renderErr = function (errMsg) {
 };
 
 const loadMap = function (position) {
-  console.log(position);
 
   const { latitude, longitude } = position.coords;
 
@@ -43,11 +46,9 @@ const loadMap = function (position) {
   }).addTo(map);
 
   const marker = L.marker(coords).addTo(map);
-  
 };
 
 const getaddressPro = function (para) {
-
   fetch(
     `https://geo.ipify.org/api/v2/country,city,vpn?apiKey=at_hUdp8MaSA3JQDttLmCj2iQQvRlu7G&ipAddress=${para}`
   )
@@ -58,35 +59,36 @@ const getaddressPro = function (para) {
       return response.json();
     })
     .then(function (data) {
-      console.log(data);
-
+      // console.log(data);
+      
       const { ip, isp, location } = data;
       const { city, country, timezone, lat, lng, postalCode } = location;
-
+      
       ipAddress.textContent = ip;
       $city.textContent = city;
       code.textContent = postalCode;
       $country.textContent = country;
       $timezone.textContent = timezone;
       $isp.textContent = isp;
-
-      const myPosition = {
+      
+      const apiPosition = {
         coords: {
           latitude: lat,
           longitude: lng,
         },
       };
       // console.log(myPosition);
-      loadMap(myPosition);
+
+      loadMap(apiPosition);
     })
     .catch((err) => {
-      renderErr("Invalid IP address or domain");
+      
+      console.log(err);
+
+        // renderErr("Invalid IP address or domain")
     });
 };
 
-
-// getaddressPro('19.117.63.126')
-// getaddressPro('197.210.85.177')
 
 input.focus();
 search.addEventListener("click", function () {
@@ -97,3 +99,8 @@ input.addEventListener("keypress", function (e) {
     getaddressPro(input.value);
   }
 });
+
+/*Test IPAddress*/
+
+// getaddressPro('19.117.63.126')
+// getaddressPro('197.210.85.177')
