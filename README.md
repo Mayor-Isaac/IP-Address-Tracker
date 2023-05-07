@@ -32,7 +32,7 @@ Users should be able to:
 ### Links
 
 - Solution URL: [https://github.com/Mayor-Isaac/IP-Address-Tracker.git]
-- Live Site URL:[https://idyllic-IP-tracker.netlify.app/]
+- Live Site URL:[https://idyllic-ip-tracker.netlify.app/]
 
 ## My process
 
