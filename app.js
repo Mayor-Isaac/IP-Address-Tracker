@@ -11,56 +11,35 @@ const code = document.querySelector(".postalCode");
 const $isp = document.querySelector(".isp");
 const mapDiv = document.querySelector("#map");
 
-// const getPosition = function () {
-//   if (navigator.geolocation) {
-//     navigator.geolocation.getCurrentPosition(
-//       loadMap,
-//       function () {
-//         alert("Please allow browser to see your location");
-//          /* fail callback */
-//       }
-//     );
-//   }
-// };
-
-// getPosition()
-
+//ERROR MESSAGE FOR INVALID IP-ADDRESS
 const renderErr = function (errMsg) {
   const errDiv = document.createElement("div");
   errDiv.classList.add("error");
+  errDiv.classList.add("text-center");
   errDiv.innerHTML = `${errMsg}`;
   document.querySelector(".top-container").append(errDiv);
+  setTimeout(function(){
+    errDiv.style.animationName = 'fadeOut'
+      setTimeout(function(){
+          errDiv.remove()
+      },500)
+  },3000)
 };
 
-const loadMap = function (position) {
-
-  const { latitude, longitude } = position.coords;
-
-  const coords = [latitude, longitude];
-
-  const map = L.map("map").setView(coords, 15);
-
-  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution:
-      '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-  }).addTo(map);
-
-  const marker = L.marker(coords).addTo(map);
-};
+const map = L.map("map", {
+  zoom: 8
+}).setView([0, 0], 15);
 
 const getaddressPro = function (para) {
   fetch(
     `https://geo.ipify.org/api/v2/country,city,vpn?apiKey=at_hUdp8MaSA3JQDttLmCj2iQQvRlu7G&ipAddress=${para}`
   )
-    .then(function (response) {
-      if (!response.ok) {
-        throw new Error("Invalid IP address or domain");
-      }
-      return response.json();
-    })
+    .then(response => response.json())
     .then(function (data) {
       // console.log(data);
       
+      // DESTRUCTURING
+
       const { ip, isp, location } = data;
       const { city, country, timezone, lat, lng, postalCode } = location;
       
@@ -77,20 +56,38 @@ const getaddressPro = function (para) {
           longitude: lng,
         },
       };
-      // console.log(myPosition);
 
-      loadMap(apiPosition);
+        const { latitude, longitude } = apiPosition.coords;
+      
+        const coords = [latitude, longitude];
+              
+        map.setView(coords, 15, {
+          animate: true,
+          pan: {
+            duration: .8,
+          },
+        });
+
+        L.tileLayer("https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", {
+          attribution:
+            '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        let myIcon = L.icon({
+          iconUrl: './images/icon-location.svg'
+      });
+      
+        const marker = L.marker(coords,{icon: myIcon}).addTo(map);
     })
     .catch((err) => {
-      
-      console.log(err);
-
-        // renderErr("Invalid IP address or domain")
+      input.value = ''
+              renderErr("Invalid IP address or domain")
     });
 };
 
 
 input.focus();
+
 search.addEventListener("click", function () {
   getaddressPro(input.value);
 });
@@ -100,7 +97,28 @@ input.addEventListener("keypress", function (e) {
   }
 });
 
+// IMMEDIATELY INVOKED FUNCTION EXPRESSION (IIFE)
+
+(() => {
+  
+  //GET USER'S IP-ADDRESS
+
+  fetch('https://api.ipify.org?format=json')
+  .then(response => response.json())
+  .then(data => {
+    getaddressPro(data.ip) /*Render the IP Address on map*/
+  })
+  .catch(error => {
+    console.error('Error:', error);
+
+    renderErr("Please turn on your location and refresh")
+  });
+})()
+
+
 /*Test IPAddress*/
 
 // getaddressPro('19.117.63.126')
+// getaddressPro('102.90.42.83')
 // getaddressPro('197.210.85.177')
+// getaddressPro('102.89.41.70')

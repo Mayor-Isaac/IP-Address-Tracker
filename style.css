@@ -17,6 +17,12 @@ body {
   font-family: "Rubik", sans-serif;
   font-weight: 400;
 }
+.text-center{
+  text-align: center;
+}
+.fw-700{
+  font-weight: 700;
+}
 .top-container {
   background-image: url(./images/pattern-bg.png);
   background-position: center;
@@ -26,8 +32,6 @@ body {
 }
 .top-container h2 {
   padding: 2rem 0 1rem;
-  text-align: center;
-  font-weight: 700;
   color: var(---white-);
 }
 .top-container .search {
@@ -47,12 +51,12 @@ body {
   font-size: 1.8rem;
 }
 .search input::placeholder {
-  color: var(---grey-);
-  font-weight: 500;
+  color: var(---black-);
+  font-weight: bold;
   font-size: inherit;
 }
 .search input:focus{
-  border: 3px solid #969696;
+  border: 2px solid var(---black-);
 }
 .send {
   display: flex;
@@ -69,19 +73,16 @@ BOTTOM CONTAINER
 .bottom-container {
   position: relative;
 }
-.bottom-container > div:not(:last-of-type) {
+.details {
   position: absolute;
   left: 50%;
   transform: translate(-50%, -50%);
-}
-.details {
   top: 0;
   padding: 1.5rem;
   background-color: var(---white-);
   border-radius: 10px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  position: relative;
 }
 .details div {
   padding: 0 1.5rem 0 1rem;
@@ -90,34 +91,21 @@ BOTTOM CONTAINER
   border-right: 1px solid var(---grey-);
 }
 .details p {
-  font-weight: 700;
   color: var(---grey-);
   padding: 1rem 0;
 }
-.bottom-container .locate {
-  top: 50%;
-}
 .attribution {
-  text-align: center;
   color: var(---grey-);
 }
 .attribution a {
-  color: var(---black-);
-  font-weight: 700;
+  color: #5873DA;
   text-decoration: none;
 }
 .error {
-  text-align: center;
   font-weight: 500;
-  color: var(---white-);
+  font-size: 1.9rem;
+  color: #DC3545;
   animation: animate 0.8s ease-in-out;
-}
-
-/* Map */
-
-#map {
-  height: calc(95vh - 220px);
-  z-index: -1;
 }
 
 @keyframes animate {
@@ -130,9 +118,30 @@ BOTTOM CONTAINER
     transform: translateY(0);
   }
 }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+}
+
+/* Map */
+
+#map {
+  height: calc(95vh - 220px);
+  z-index: -1;
+}
 @media screen and (max-width: 720px) {
   .top-container .search {
     width: 55%;
+  }
+  #map{
+    height: 800px;
   }
 }
 @media screen and (max-width: 645px) {
