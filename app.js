@@ -30,17 +30,17 @@ const map = L.map("map", {
   zoom: 8
 }).setView([0, 0], 15);
 
-const getaddressPro = function (para) {
-  fetch(
-    `https://geo.ipify.org/api/v2/country,city,vpn?apiKey=at_hUdp8MaSA3JQDttLmCj2iQQvRlu7G&ipAddress=${para}`
-  )
-    .then(response => response.json())
-    .then(function (data) {
-      // console.log(data);
-      
-      // DESTRUCTURING
+const getaddressPro = async function (para) {
+  try {
+    const res = await fetch(`https://geo.ipify.org/api/v2/country,city,vpn?apiKey=at_hUdp8MaSA3JQDttLmCj2iQQvRlu7G&ipAddress=${para}`)
+    // console.log(res);
+    if(!res.ok) throw new Error ('Err')
+    // console.log(!res.ok) 
+    const data = await res.json()
+    // console.log(data);
 
-      const { ip, isp, location } = data;
+    // DESTRUCTURING
+    const { ip, isp, location } = data;
       const { city, country, timezone, lat, lng, postalCode } = location;
       
       ipAddress.textContent = ip;
@@ -78,11 +78,11 @@ const getaddressPro = function (para) {
       });
       
         const marker = L.marker(coords,{icon: myIcon}).addTo(map);
-    })
-    .catch((err) => {
-      input.value = ''
-              renderErr("Invalid IP address or domain")
-    });
+  } catch (err) {
+    renderErr("Invalid IP address or domain")
+  }finally{
+    input.value = ''
+  }
 };
 
 
@@ -99,26 +99,26 @@ input.addEventListener("keypress", function (e) {
 
 // IMMEDIATELY INVOKED FUNCTION EXPRESSION (IIFE)
 
-(() => {
-  
-  //GET USER'S IP-ADDRESS
+(async () => {
 
-  fetch('https://api.ipify.org?format=json')
-  .then(response => response.json())
-  .then(data => {
-    getaddressPro(data.ip) /*Render the IP Address on map*/
-  })
-  .catch(error => {
-    console.error('Error:', error);
+  // GET USER'S IP-ADDRESS
+
+ try {
+  const url = await fetch('https://api.ipify.org?format=json')
+  const res = await url.json()
+  console.log(res.ip);
+  getaddressPro(res.ip)
+ } catch (error) {
+  console.error('Error:', error);
 
     renderErr("Please turn on your location and refresh")
-  });
+ }
 })()
 
 
 /*Test IPAddress*/
 
-// getaddressPro('19.117.63.126')
+// getaddressPro('19.117.63') /*Error Test */
 // getaddressPro('102.90.42.83')
 // getaddressPro('197.210.85.177')
 // getaddressPro('102.89.41.70')
